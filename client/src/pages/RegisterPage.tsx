@@ -2,6 +2,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Link } from "react-router-dom";
+import SignInButton from "@/components/SignInButton";
 function RegisterPage() {
     return (
         <div className="relative min-h-screen flex items-center">
@@ -16,9 +17,11 @@ function RegisterPage() {
                     Continue to access your dashboard
                 </p>
 
-                <Button className="w-full flex gap-2 bg-emerald-500 hover:bg-emerald-600 hover:cursor-pointer">
+                {/* <Button className="w-full flex gap-2 bg-emerald-500 hover:bg-emerald-600 hover:cursor-pointer">
                     <span>🔍</span> Sign in with Google
-                </Button>
+                </Button> */}
+
+                <SignInButton />
 
                 <div className="flex items-center my-4">
                     <div className="flex-grow border-t border-gray-300" />
