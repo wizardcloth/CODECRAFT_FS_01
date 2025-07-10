@@ -2,10 +2,10 @@ import { auth } from "@/lib/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
-
+import Unauthorized from "../Unauthorized";
 function home() {
     const [user] = useAuthState(auth);
-    if (!user) return <div>Unauthorized</div>;
+    if (!user) return <Unauthorized/>;
     const navigate = useNavigate();
     const handleSignout = async () => {
 

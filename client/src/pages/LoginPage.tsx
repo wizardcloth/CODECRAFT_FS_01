@@ -3,8 +3,29 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Link } from "react-router-dom";
 import SignInButton from "@/components/SignInButton";
+import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
+import { auth } from "@/lib/firebase";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function LoginPage() {
+    const [Email, setEmail] = useState('');
+    const [Password, setPassword] = useState('');
+    const [signInWithEmailAndPassword, , loading, error,] = useSignInWithEmailAndPassword(auth);
+    const navigate = useNavigate();
+
+    if (error) {
+        //* have to navigate to error page
+        console.log(error);
+    }
+    const handleSignIn = async () => {
+        try {
+            await signInWithEmailAndPassword(Email, Password);
+            navigate("/authcallback");
+        } catch (error) {
+            console.log(error);
+        }
+    };
     return (
         <div className="relative min-h-screen flex items-center">
             <div
@@ -18,9 +39,7 @@ function LoginPage() {
                     Continue to access your dashboard
                 </p>
 
-                {/* <Button className="w-full flex gap-2 bg-emerald-500 hover:bg-emerald-600 hover:cursor-pointer">
-                    <span>🔍</span> Login with Google
-                </Button> */}
+
                 <SignInButton />
 
 
@@ -37,6 +56,7 @@ function LoginPage() {
                         type="email"
                         placeholder="Enter your email"
                         className="w-full border-gray-400 border-2"
+                        onChange={(e) => setEmail(e.target.value)}
                     />
                 </div>
 
@@ -47,6 +67,7 @@ function LoginPage() {
                         type="password"
                         placeholder="Enter your password"
                         className="w-full  border-gray-400 border-2"
+                        onChange={(e) => setPassword(e.target.value)}   
                     />
                     {/* <div className="text-right">
                         <a href="#" className="text-xs text-gray-500 hover:underline">
@@ -55,7 +76,11 @@ function LoginPage() {
                     </div> */}
                 </div>
 
-                <Button className="w-full hover:cursor-pointer">Login</Button>
+                <Button className="w-full hover:cursor-pointer"
+                    onClick={handleSignIn}
+                    disabled={loading}>
+                    Login
+                </Button>
 
                 <p className="text-xs text-center text-gray-600">
                     Don't have an account?{" "}

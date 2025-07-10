@@ -5,10 +5,11 @@ import { Loader } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const SignInButton = () => {
-    const [signInWithGoogle, user, loading, error] = useSignInWithGoogle(auth);
+    const [signInWithGoogle,, loading, error] = useSignInWithGoogle(auth);
     const navigate = useNavigate();
 
-    if(error || user) {
+    if(error) {
+        //* have to navigate to error page
         console.log(error);
     }
 
