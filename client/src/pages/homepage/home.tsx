@@ -2,15 +2,17 @@ import { auth } from "@/lib/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import LoaderSpin from "../Loader/Loader";
 
 function Home() {
     const [user, loading] = useAuthState(auth);
+    const [signingOut, setSigningOut] = useState(false);
     const navigate = useNavigate();
 
     const handleSignout = async () => {
         try {
+            setSigningOut(true);
             await signOut(auth);
             navigate("/");
         } catch (error) {
@@ -19,19 +21,17 @@ function Home() {
     };
 
     useEffect(() => {
-        if (!loading && !user) {
+        if (!loading && !user && !signingOut) {
             navigate("/unauthorized");
         }
     }, [user, loading, navigate]);
 
-    // ✅ Don’t show page while auth is loading
     if (loading) {
         return <LoaderSpin/>
     }
 
-    // ✅ Don’t show page while redirecting unauthenticated user
     if (!user) {
-        return null; // Return nothing while waiting for redirect
+        return null; 
     }
 
     return (

@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../../lib/firebase.ts";
 import axiosInstance from "@/lib/axios.ts";
+import { createHeader } from "@/authProvider/authProvider.ts";
 
 const AuthCallback = () => {
     const navigate = useNavigate();
@@ -17,13 +18,13 @@ const AuthCallback = () => {
                 return navigate("/");
             }
             try {
-                await axiosInstance.post("/auth/authCallback", {
+                const header = await createHeader();
+                await axiosInstance.post("/auth/authCallback/google", {
                     id: user.uid,
                     firstName: user.displayName?.split(" ")[0] || "",
                     lastName: user.displayName?.split(" ")[1] || "",
                     imageUrl: user.photoURL,
-                });
-
+                }, header);
             } catch (error) {
                 console.error("AuthCallback Error:", error);
             } finally {

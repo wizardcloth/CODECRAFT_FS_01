@@ -7,24 +7,34 @@ import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import { auth } from "@/lib/firebase";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { createHeader } from "@/authProvider/authProvider";
+import axiosInstance from "@/lib/axios";
+import toast from "react-hot-toast";
 function RegisterPage() {
 
-    const [Name, setName] = useState('');
-    const [Email, setEmail] = useState('');
-    const [Password, setPassword] = useState('');
-    const [createUserWithEmailAndPassword, , loading, error,] = useCreateUserWithEmailAndPassword(auth);
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [createUserWithEmailAndPassword, , loading, ,] = useCreateUserWithEmailAndPassword(auth);
 
     const navigate = useNavigate();
 
-    if (error) {
-        //* have to navigate to error page
-        console.log(error);
-    }
     const handleSignIn = async () => {
         try {
-            await createUserWithEmailAndPassword(Email, Password);
-            navigate("/authcallback/email");
+            await createUserWithEmailAndPassword(email, password);
+
+            const header = await createHeader();
+
+            await axiosInstance.post("/auth/authCallback/email", { name, email }, header);
+            setEmail("");
+            setPassword("");
+            setName("");
+            toast.success("Account created successfully");
+
+            navigate("/home");
+
         } catch (error) {
+            toast.error("Something went wrong");
             console.log(error);
         }
     };
@@ -51,10 +61,10 @@ function RegisterPage() {
                 </div>
 
                 <div className="space-y-2">
-                    <Label htmlFor="Name" className="text-xs">Name</Label>
+                    <Label htmlFor="name" className="text-xs">Name</Label>
                     <Input
-                        id="Name"
-                        type="Name"
+                        id="name"
+                        type="name"
                         placeholder="Enter your Full Name"
                         className="w-full border-gray-400 border-2"
                         onChange={(e) => setName(e.target.value)}
@@ -89,11 +99,12 @@ function RegisterPage() {
                     disabled={loading}>
                     Sign In
                 </Button>
+                
 
                 <p className="text-xs text-center text-gray-600">
                     Already have an account? {""}
                     <Link to="/" className="text-black font-semibold underline" >
-                        Sign In
+                       Log In
                     </Link>
                 </p>
             </div>

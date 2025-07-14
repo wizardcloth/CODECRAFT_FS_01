@@ -11,17 +11,14 @@ import { useNavigate } from "react-router-dom";
 function LoginPage() {
     const [Email, setEmail] = useState('');
     const [Password, setPassword] = useState('');
-    const [signInWithEmailAndPassword, , loading, error,] = useSignInWithEmailAndPassword(auth);
+    const [signInWithEmailAndPassword, , loading, ] = useSignInWithEmailAndPassword(auth);
     const navigate = useNavigate();
 
-    if (error) {
-        //* have to navigate to error page
-        console.log(error);
-    }
+    
     const handleSignIn = async () => {
         try {
             await signInWithEmailAndPassword(Email, Password);
-            navigate("/authcallback/email");
+            navigate("/home");
         } catch (error) {
             console.log(error);
         }
