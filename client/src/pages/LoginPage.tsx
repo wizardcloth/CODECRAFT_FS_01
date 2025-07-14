@@ -21,7 +21,7 @@ function LoginPage() {
     const handleSignIn = async () => {
         try {
             await signInWithEmailAndPassword(Email, Password);
-            navigate("/authcallback");
+            navigate("/authcallback/email");
         } catch (error) {
             console.log(error);
         }

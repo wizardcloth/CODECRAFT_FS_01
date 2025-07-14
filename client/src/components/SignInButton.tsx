@@ -15,7 +15,7 @@ const SignInButton = () => {
 
     const handleSignIn = async () => {
         await signInWithGoogle();
-        navigate("/authcallback");
+        navigate("/authcallback/google");
     };
     return (
         <Button

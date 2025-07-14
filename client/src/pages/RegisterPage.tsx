@@ -23,7 +23,7 @@ function RegisterPage() {
     const handleSignIn = async () => {
         try {
             await createUserWithEmailAndPassword(Email, Password);
-            navigate("/authcallback");
+            navigate("/authcallback/email");
         } catch (error) {
             console.log(error);
         }

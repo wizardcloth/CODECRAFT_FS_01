@@ -5,18 +5,34 @@ import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../../lib/firebase.ts";
+import axiosInstance from "@/lib/axios.ts";
 
 const AuthCallback = () => {
     const navigate = useNavigate();
     const [user] = useAuthState(auth);
 
     useEffect(() => {
-        if (user) {
-            navigate("/home");
+        const syncUser = async () => {
+            if (!user) {
+                return navigate("/");
+            }
+            try {
+                await axiosInstance.post("/auth/authCallback", {
+                    id: user.uid,
+                    firstName: user.displayName?.split(" ")[0] || "",
+                    lastName: user.displayName?.split(" ")[1] || "",
+                    imageUrl: user.photoURL,
+                });
+
+            } catch (error) {
+                console.error("AuthCallback Error:", error);
+            } finally {
+                navigate("/home");
+            }
         }
-        if(!user) navigate("/");
-    })
-   
+        syncUser();
+    }, [user, navigate]);
+
 
     return (
         <div className="h-screen w-full bg-black flex items-center justify-center">
