@@ -8,7 +8,7 @@ import users from "./Routes/getUsers.js"
 
 const app = express();
 
-dotenv.config();    
+dotenv.config();
 
 //middleware
 app.use(express.json());
@@ -24,13 +24,17 @@ app.use(
 //routes
 
 app.use("/api/auth", authRoutes);
-app.use("/api/users",users);
+app.use("/api/users", users);
 
 
 app.get("/", (req, res) => res.send("Serverless Express API"));
 
-app.listen(3000, async () => {
-await connectDB();
-    console.log("Server is running on port 3000");
-});
+// app.listen(3000, async () => {
+// await connectDB();
+//     console.log("Server is running on port 3000");
+// });
 
+export default async function handler(req, res) {
+    await connectDB();
+    app(req, res);
+}
