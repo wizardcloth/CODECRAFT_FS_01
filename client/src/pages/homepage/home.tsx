@@ -8,11 +8,12 @@ import { useUserStore } from "@/store/User.store";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { User } from "lucide-react";
+import CardSkeleton from "@/Skeleton/card";
 function Home() {
     const [user, loading] = useAuthState(auth);
     const [signingOut, setSigningOut] = useState(false);
     const userStore = useUserStore();
-    const { users, fetchUser, usersEmail, fetchUserEmail } = userStore;
+    const { users, fetchUser, usersEmail, fetchUserEmail, isLoading } = userStore;
     const navigate = useNavigate();
 
     const handleSignout = async () => {
@@ -55,8 +56,10 @@ function Home() {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {users ? (
-                        users.map((user: any) => (
+                    {isLoading ? (
+                        <CardSkeleton />
+                    ) : (
+                        (users ?? []).map((user: any) => (
                             <Card key={user._id} className="shadow-lg hover:shadow-xl transition-shadow">
                                 <CardHeader className="flex items-center gap-4">
                                     <img
@@ -72,8 +75,6 @@ function Home() {
                                 </CardContent>
                             </Card>
                         ))
-                    ) : (
-                        <p className="text-gray-500">No users found.</p>
                     )}
                 </div>
 
@@ -81,8 +82,11 @@ function Home() {
                     <h1 className="font-bold text-3xl">Users Via Email Login</h1>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {usersEmail ? (
-                        usersEmail.map((user: any) => (
+                    {isLoading ? (
+                        <CardSkeleton />
+                    ) : (
+                        
+                        (usersEmail ?? []).map((user: any) => (
                             <Card key={user._id} className="shadow-lg hover:shadow-xl transition-shadow">
                                 <CardHeader className="flex items-center gap-4">
                                     <User />
@@ -94,8 +98,6 @@ function Home() {
                                 </CardContent>
                             </Card>
                         ))
-                    ) : (
-                        <p className="text-gray-500">No usersEmail found.</p>
                     )}
                 </div>
             </div>
