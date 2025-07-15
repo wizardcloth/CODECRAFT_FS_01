@@ -2,7 +2,7 @@ import express from "express";
 import { connectDB } from "./config/db.js";
 import dotenv from "dotenv";
 import authRoutes from "./Routes/authRoute.js";
-import cors from "cors";
+import Cors from 'cors';
 
 import users from "./Routes/getUsers.js"
 
@@ -12,13 +12,13 @@ dotenv.config();
 
 //middleware
 app.use(express.json());
-app.use(
-    cors({
+import initMiddleware from './middleware/init.middleware.js'; // helper you must create
+
+const cors = initMiddleware(
+    Cors({
         origin: "https://codecraft-fs-01-pai2.vercel.app",
-        methods: ["GET", "POST", "PUT", "DELETE"],
+        methods: ["GET", "POST", "OPTIONS", "PUT", "DELETE"],
         allowedHeaders: ["Content-Type", "Authorization"],
-        credentials: true,
-        preflightContinue: false,
     })
 );
 
@@ -38,6 +38,7 @@ app.get("/", (req, res) => res.send("Serverless Express API"));
 // });
 
 export default async function handler(req, res) {
+    await cors(req, res);
     await connectDB();
     app(req, res);
 }
