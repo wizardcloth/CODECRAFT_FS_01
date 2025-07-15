@@ -4,6 +4,8 @@ import dotenv from "dotenv";
 import authRoutes from "./Routes/authRoute.js";
 import cors from "cors";
 
+import users from "./Routes/getUsers.js"
+
 const app = express();
 
 dotenv.config();    
@@ -22,6 +24,7 @@ app.use(
 //routes
 
 app.use("/api/auth", authRoutes);
+app.use("/api/users",users);
 
 
 app.get("/", (req, res) => res.send("Serverless Express API"));

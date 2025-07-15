@@ -1,8 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Loader } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-// import axiosInstance from "@/lib/axios";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../../lib/firebase.ts";
 import axiosInstance from "@/lib/axios.ts";
@@ -12,25 +11,31 @@ const AuthCallback = () => {
     const navigate = useNavigate();
     const [user] = useAuthState(auth);
 
+    const syncAttempt = useRef(false); //&  Prevent multiple API calls
+
     useEffect(() => {
         const syncUser = async () => {
-            if (!user) {
-                return navigate("/");
-            }
+            if (!user || syncAttempt.current) return; //& Prevent duplicate requests
+            syncAttempt.current = true; //&  Mark API call as completed
+
             try {
+                // const token = await user.getIdToken();
+                // console.log(token);
                 const header = await createHeader();
-                await axiosInstance.post("/auth/authCallback/google", {
+                await axiosInstance.post("/auth/authcallback/google", {
                     id: user.uid,
                     firstName: user.displayName?.split(" ")[0] || "",
                     lastName: user.displayName?.split(" ")[1] || "",
                     imageUrl: user.photoURL,
-                }, header);
+                },header);
+
             } catch (error) {
                 console.error("AuthCallback Error:", error);
             } finally {
                 navigate("/home");
             }
-        }
+        };
+
         syncUser();
     }, [user, navigate]);
 
