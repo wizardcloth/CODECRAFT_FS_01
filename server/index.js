@@ -14,14 +14,13 @@ dotenv.config();
 app.use(express.json());
 app.use(
     cors({
-        // origin: "*",
         origin: "https://codecraft-fs-01-pai2.vercel.app",
         methods: ["GET", "POST", "PUT", "DELETE"],
         allowedHeaders: ["Content-Type", "Authorization"],
-        // ACCESS_CONTROL_ALLOW_ORIGIN: "*",
-        ACCESS_CONTROL_ALLOW_ORIGIN: "https://codecraft-fs-01-pai2.vercel.app",
+        credentials: true, 
     })
 );
+
 
 //routes
 
