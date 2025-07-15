@@ -2,7 +2,7 @@ import axios from 'axios';
 
 //&Deployment
 const axiosInstance = axios.create({
-  baseURL: 'https://codecraft-fs-01.vercel.app', 
+  baseURL: 'https://codecraft-fs-01.vercel.app/api', 
 });
 
 //& Production
