@@ -4,7 +4,7 @@ import { getUsersGoogle } from "../controller/User.controller.js";
 import {protectedRoute} from "../middleware/auth.middleware.js";
 const router = Router();
 
-router.get("/google",getUsersGoogle);
-router.get("/email",getUsersEmail);
+router.get("/google",protectedRoute,getUsersGoogle);
+router.get("/email",protectedRoute,getUsersEmail);
 
 export default router;
